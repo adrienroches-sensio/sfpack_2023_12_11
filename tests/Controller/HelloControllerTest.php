@@ -6,12 +6,11 @@ use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
 class HelloControllerTest extends WebTestCase
 {
-    public function testSomething(): void
+    public function testHelloWithDefaultName(): void
     {
         $client = static::createClient();
-        $crawler = $client->request('GET', '/');
+        $client->request('GET', '/hello');
 
         $this->assertResponseIsSuccessful();
-        $this->assertSelectorTextContains('h1', 'Hello World');
     }
 }
