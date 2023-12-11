@@ -15,5 +15,7 @@ Install
 
 ```bash
 $ symfony composer install
+$ yarn install
+$ yarn dev
 $ symfony serve -d
 ```
