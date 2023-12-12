@@ -43,7 +43,10 @@ class Movie
     private ?\DateTimeImmutable $releasedAt = null;
 
     #[ORM\Column(length: 255)]
-    #[MoviePosterExists()]
+    #[Assert\AtLeastOneOf(constraints: [
+        new MoviePosterExists(),
+        new Assert\Url(),
+    ])]
     private ?string $poster = null;
 
     #[ORM\ManyToMany(targetEntity: Genre::class, inversedBy: 'movies')]
