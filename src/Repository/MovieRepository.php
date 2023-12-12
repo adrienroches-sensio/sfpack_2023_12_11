@@ -16,6 +16,8 @@ use Doctrine\Persistence\ManagerRegistry;
  */
 class MovieRepository extends ServiceEntityRepository
 {
+    private array|null $allMovies = null;
+
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, Movie::class);
