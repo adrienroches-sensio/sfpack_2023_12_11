@@ -2,9 +2,8 @@
 
 namespace App\Entity;
 
-use App\Model\Movie as MovieModel;
 use App\Repository\MovieRepository;
-use App\Validator\Constraints\MoviePosterExists;
+use App\Validator\Constraints\MovieSlugFormat;
 use App\Validator\Constraints\PosterValid;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -23,7 +22,7 @@ class Movie
 
     #[ORM\Column(length: 255)]
     #[Assert\NotNull()]
-    #[Assert\Regex('#'.MovieModel::SLUG_FORMAT.'#')]
+    #[MovieSlugFormat()]
     #[Assert\Length(min: 7)]
     private ?string $slug = null;
 
