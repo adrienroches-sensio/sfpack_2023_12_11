@@ -2,7 +2,9 @@
 
 namespace App\Model;
 
+use App\Entity\Movie as MovieEntity;
 use DateTimeImmutable;
+use function array_map;
 
 final class Movie
 {
@@ -22,5 +24,27 @@ final class Movie
     public function year(): string
     {
         return $this->releasedAt->format('Y');
+    }
+
+    public static function fromEntity(MovieEntity $movieEntity): self
+    {
+        return new self(
+            slug: $movieEntity->getSlug(),
+            title: $movieEntity->getTitle(),
+            plot: $movieEntity->getPlot(),
+            poster: $movieEntity->getPoster(),
+            releasedAt: $movieEntity->getReleasedAt(),
+            genres: [], // TODO
+        );
+    }
+
+    /**
+     * @param list<MovieEntity> $movieEntities
+     *
+     * @return list<self>
+     */
+    public static function fromEntities(array $movieEntities): array
+    {
+        return array_map(self::fromEntity(...), $movieEntities);
     }
 }

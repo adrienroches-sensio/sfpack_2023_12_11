@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Model\Movie;
 use App\Repository\MovieRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
@@ -18,7 +19,7 @@ class MovieController extends AbstractController
     public function list(MovieRepository $movieRepository): Response
     {
         return $this->render('movie/list.html.twig', [
-            'movies' => $movieRepository->listAll(),
+            'movies' => Movie::fromEntities($movieRepository->listAll()),
         ]);
     }
 
@@ -33,7 +34,7 @@ class MovieController extends AbstractController
     public function details(MovieRepository $movieRepository, string $slug): Response
     {
         return $this->render('movie/details.html.twig', [
-            'movie' => $movieRepository->getBySlug($slug),
+            'movie' => Movie::fromEntity($movieRepository->getBySlug($slug)),
         ]);
     }
 }
