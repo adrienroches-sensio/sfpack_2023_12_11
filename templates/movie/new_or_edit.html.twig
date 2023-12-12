@@ -12,7 +12,7 @@
             {% else %}
                 <h4 class="mb-3">Add a movie</h4>
             {% endif %}
-            {{ form_start(movie_form) }}
+            {{ form_start(movie_form, {attr: {'novalidate': 'novalidate'}}) }}
             {{ form_widget(movie_form) }}
             <hr class="my-4" />
             <button class="w-100 btn btn-primary btn-lg" type="submit">Valider</button>
