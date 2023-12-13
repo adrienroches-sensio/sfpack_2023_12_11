@@ -26,3 +26,15 @@ $ symfony console doctrine:migrations:migrate -n
 $ symfony console doctrine:fixtures:load -n
 $ symfony serve -d
 ```
+
+Importing movies
+================
+
+```bash
+$ symfony console app:movies:import tt1298554 "harry potter" "spread your wings" "Hidden Figures" "my lady" tt123456
+```
+
+Use the following to try the command without importing :
+```bash
+$ symfony console app:movies:import tt1298554 "harry potter" "spread your wings" "Hidden Figures" "my lady" tt123456 --dry-run
+```
