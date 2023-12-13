@@ -6,9 +6,11 @@ namespace App\Omdb\Client;
 
 use App\Omdb\Client\Model\Movie;
 use App\Omdb\Client\Model\SearchResult;
+use Symfony\Component\DependencyInjection\Attribute\AsAlias;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 use Throwable;
 
+#[AsAlias(ApiConsumerInterface::class)]
 final class ApiConsumer implements ApiConsumerInterface
 {
     public function __construct(
