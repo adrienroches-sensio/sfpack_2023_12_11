@@ -51,7 +51,7 @@ class MovieController extends AbstractController
     #[Route(
         path: '/movies/imdb-{imdbId}',
         requirements: [
-            'imdbID' => 'tt.{1,50}',
+            'imdbId' => 'tt.{1,50}',
         ],
         name: 'app_movies_details_omdb',
         methods: ['GET'],
