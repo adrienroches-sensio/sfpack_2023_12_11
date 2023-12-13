@@ -5,6 +5,7 @@ namespace App\Repository;
 use App\Entity\Movie;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
+use Symfony\Component\DependencyInjection\Attribute\Autoconfigure;
 
 /**
  * @extends ServiceEntityRepository<Movie>
@@ -14,7 +15,11 @@ use Doctrine\Persistence\ManagerRegistry;
  * @method Movie[]    findAll()
  * @method Movie[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
-class MovieRepository extends ServiceEntityRepository
+#[Autoconfigure(tags: [
+    ['name' => 'movie.repository', 'key' => 'doctrine'],
+    ['name' => 'movie.repository', 'key' => 'database'],
+])]
+class MovieRepository extends ServiceEntityRepository implements MovieRepositoryInterface
 {
     public function __construct(ManagerRegistry $registry)
     {
@@ -88,5 +93,10 @@ class MovieRepository extends ServiceEntityRepository
         ;
 
         return $qb->getQuery()->getSingleResult();
+    }
+
+    public function getByIdentifier(string $identifier)
+    {
+        return $this->getBySlug($identifier);
     }
 }

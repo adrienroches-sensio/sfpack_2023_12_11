@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\Movie as MovieEntity;
 use App\Form\MovieType;
+use App\Model\MagicMovieRepository;
 use App\Model\Movie;
 use App\Omdb\Client\ApiConsumerInterface;
 use App\Repository\MovieRepository;
@@ -17,6 +18,7 @@ class MovieController extends AbstractController
 {
     public function __construct(
         private readonly ApiConsumerInterface $omdbApiConsumer,
+        private readonly MagicMovieRepository $magicMovieRepository,
     ) {
     }
 
@@ -30,6 +32,19 @@ class MovieController extends AbstractController
         return $this->render('movie/list.html.twig', [
             'movies' => Movie::fromEntities($movieRepository->listAll()),
         ]);
+    }
+
+    #[Route(
+        path: '/movies/{type}/{identifier}',
+        requirements: [
+            'type' => 'omdb|doctrine|database',
+        ],
+        name: 'app_movies_details_magic',
+        methods: ['GET'],
+    )]
+    public function magicDetails(string $type, string $identifier): Response
+    {
+        dd($this->magicMovieRepository->get($type, $identifier));
     }
 
     #[Route(

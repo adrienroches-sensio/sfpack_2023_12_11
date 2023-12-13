@@ -6,10 +6,15 @@ namespace App\Omdb\Client;
 
 use App\Omdb\Client\Model\Movie;
 use App\Omdb\Client\Model\SearchResult;
+use App\Repository\MovieRepositoryInterface;
+use Symfony\Component\DependencyInjection\Attribute\Autoconfigure;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 use Throwable;
 
-final class ApiConsumer implements ApiConsumerInterface
+#[Autoconfigure(tags: [
+    ['name' => 'movie.repository', 'key' => 'omdb']
+])]
+final class ApiConsumer implements ApiConsumerInterface, MovieRepositoryInterface
 {
     public function __construct(
         private readonly HttpClientInterface $omdbApiClient,
@@ -87,5 +92,10 @@ final class ApiConsumer implements ApiConsumerInterface
             },
             $result['Search']
         );
+    }
+
+    public function getByIdentifier(string $identifier)
+    {
+        return $this->getByImdbId($identifier);
     }
 }
