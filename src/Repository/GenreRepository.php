@@ -5,6 +5,7 @@ namespace App\Repository;
 use App\Entity\Genre;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
+use function array_key_exists;
 
 /**
  * @extends ServiceEntityRepository<Genre>
@@ -16,6 +17,11 @@ use Doctrine\Persistence\ManagerRegistry;
  */
 class GenreRepository extends ServiceEntityRepository
 {
+    /**
+     * @var array<string, Genre>
+     */
+    private array $cache = [];
+
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, Genre::class);
@@ -45,4 +51,25 @@ class GenreRepository extends ServiceEntityRepository
 //            ->getOneOrNullResult()
 //        ;
 //    }
+
+    public function get(string $name): Genre
+    {
+        if (array_key_exists($name, $this->cache)) {
+            return $this->cache[$name];
+        }
+
+        $genre = $this->findOneBy([
+            'name' => $name,
+        ]);
+
+        if (null === $genre) {
+            $genre = (new Genre())->setName($name);
+
+            $this->getEntityManager()->persist($genre);
+        }
+
+        $this->cache[$name] = $genre;
+
+        return $genre;
+    }
 }
