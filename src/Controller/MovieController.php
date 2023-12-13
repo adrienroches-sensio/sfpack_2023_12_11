@@ -44,6 +44,7 @@ class MovieController extends AbstractController
     {
         return $this->render('movie/details.html.twig', [
             'movie' => Movie::fromEntity($movieRepository->getBySlug($slug)),
+            'can_edit' => true,
         ]);
     }
 
@@ -59,6 +60,7 @@ class MovieController extends AbstractController
     {
         return $this->render('movie/details.html.twig', [
             'movie' => Movie::fromOmdb($this->omdbApiConsumer->getByImdbId($imdbId)),
+            'can_edit' => false,
         ]);
     }
 
