@@ -2,44 +2,36 @@
 
 namespace App\Security\Voter;
 
+use App\Entity\User;
+use App\Model\Movie;
+use App\Model\Security;
+use Psr\Clock\ClockInterface;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Authorization\Voter\Voter;
-use Symfony\Component\Security\Core\User\UserInterface;
 
 class MovieVoter extends Voter
 {
-    public const EDIT = 'POST_EDIT';
-    public const VIEW = 'POST_VIEW';
+    public function __construct(
+        private readonly ClockInterface $clock,
+    ) {
+    }
 
     protected function supports(string $attribute, mixed $subject): bool
     {
-        // replace with your own logic
-        // https://symfony.com/doc/current/security/voters.html
-        return in_array($attribute, [self::EDIT, self::VIEW])
-            && $subject instanceof \App\Entity\Movie;
+        return Security::MOVIE_VIEW_DETAILS === $attribute && $subject instanceof Movie;
     }
 
+    /**
+     * @param Movie $subject
+     */
     protected function voteOnAttribute(string $attribute, mixed $subject, TokenInterface $token): bool
     {
         $user = $token->getUser();
-        // if the user is anonymous, do not grant access
-        if (!$user instanceof UserInterface) {
+
+        if (!$user instanceof User) {
             return false;
         }
 
-        // ... (check conditions and return true to grant permission) ...
-        switch ($attribute) {
-            case self::EDIT:
-                // logic to determine if the user can EDIT
-                // return true or false
-                break;
-
-            case self::VIEW:
-                // logic to determine if the user can VIEW
-                // return true or false
-                break;
-        }
-
-        return false;
+        return $user->isOlderThanOrEqual($subject->rated->minAgeRequired(), $this->clock->now());
     }
 }
