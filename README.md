@@ -43,6 +43,6 @@ Log in
 ======
 
 1. `adrien`/`adrien` [admin] (35 yo)
-2. `max`/`max` (15 yo)
+2. `max`/`max` [admin] (15 yo)
 3. `lou`/`lou` (5 yo)
 4. `john`/`john`
