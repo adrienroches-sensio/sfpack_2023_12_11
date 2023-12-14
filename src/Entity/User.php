@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use App\Repository\UserRepository;
+use DateTimeImmutable;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
@@ -111,5 +112,22 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         $this->birthdate = $birthdate;
 
         return $this;
+    }
+
+    /**
+     * @phpstan-assert-if-true !null $this->getBirthdate()
+     */
+    public function hasBirthdate(): bool
+    {
+        return null !== $this->birthdate;
+    }
+
+    public function isOlderThanOrEqual(int $age, DateTimeImmutable $now): bool
+    {
+        if ($this->hasBirthdate() === false) {
+            return false;
+        }
+
+        return $now->diff($this->getBirthdate())->y >= $age;
     }
 }
